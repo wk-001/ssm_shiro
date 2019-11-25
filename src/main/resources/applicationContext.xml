@@ -9,16 +9,14 @@
 		http://www.springframework.org/schema/aop   http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/tx    http://www.springframework.org/schema/tx/spring-tx.xsd ">
 
-    <!--Spring的配置文件，主要配置和业务逻辑相关的，如数据源，事务控制等-->
+                <!--Spring的配置文件，主要配置和业务逻辑相关的，如数据源，事务控制等-->
 
-    <!--扫描除controller以外的包-->
-    <context:component-scan base-package="com.wk.service.impl"/>
+    <!-- ===============================持久层配置========================================= -->
 
-    <!--导入资源文件-->
+                                    <!--导入资源文件-->
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
-
-    <!-- 配置数据源 -->
+                                    <!-- 配置数据源 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init">
         <property name="driverClassName" value="${dataSource.driverClass}"></property>
         <property name="url" value="${dataSource.jdbcUrl}"></property>
@@ -58,7 +56,7 @@
         <property name="filters" value="mergeStat,log4j,wall" />
     </bean>
 
-    <!--Mybatis配置-->
+                                            <!--Mybatis Plus 配置-->
     <bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
         <!--引用数据源-->
         <property name="dataSource" ref="dataSource"/>
@@ -115,6 +113,11 @@
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/> -->
     </bean>
 
+    <!-- =========================业务层配置===================================== -->
+
+    <!--扫描除controller以外的包-->
+    <context:component-scan base-package="com.wk.service.impl"/>
+
     <!--事务管理器-->
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <!--控制数据源，把数据提交给数据库-->
@@ -134,6 +137,7 @@
             <tx:method name="find*" propagation="SUPPORTS" read-only="true" />
             <tx:method name="select*" propagation="SUPPORTS" read-only="true" />
             <tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+            <tx:method name="query*" propagation="SUPPORTS" read-only="true" />
         </tx:attributes>
     </tx:advice>
 
