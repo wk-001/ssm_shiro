@@ -2,6 +2,7 @@ package com.wk.controller;
 
 
 import com.wk.service.UserService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,8 @@ public class UserController {
 		return "list";
 	}
 
+	//必须有指定权限才可以访问该方法
+	@RequiresPermissions(value = "user:add")
 	@RequestMapping("add")
 	@ResponseBody
 	public Map<String,Object> add(){
@@ -38,6 +41,7 @@ public class UserController {
 		return map;
 	}
 
+	@RequiresPermissions(value = "user:delete")
 	@RequestMapping("del")
 	@ResponseBody
 	public Map<String,Object> del(){
@@ -46,6 +50,8 @@ public class UserController {
 		return map;
 	}
 
+	//必须同时拥有两个权限才可以访问该方法
+	@RequiresPermissions(value = {"user:update","user:delete"})
 	@RequestMapping("upd")
 	@ResponseBody
 	public Map<String,Object> upd(){
@@ -54,6 +60,7 @@ public class UserController {
 		return map;
 	}
 
+	@RequiresPermissions(value = "user:list")
 	@RequestMapping("query")
 	@ResponseBody
 	public Map<String,Object> query(){

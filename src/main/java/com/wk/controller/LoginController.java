@@ -11,6 +11,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,10 +22,14 @@ public class LoginController {
 	@Autowired
 	private UserService userService;
 
+	//普通项目 未登录时跳转到登录页面
 	@RequestMapping("toLogin")
 	public String toLogin(){
 		return "login";
 	}
+
+
+
 	/* 普通项目 跳转页面
 	@RequestMapping("login")
 	public String login(User user, HttpSession session){
@@ -45,6 +50,7 @@ public class LoginController {
 
 	//前后端分离 返回json数据
 	@RequestMapping("login")
+	@ResponseBody
 	public ResultObj login(User user, HttpSession session){
 		UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(),user.getPwd());
 		Subject subject = SecurityUtils.getSubject();

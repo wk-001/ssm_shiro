@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice	//监视controller是否有异常发生，只要发生指定异常就返回json数据
 public class GlobalExceptionHanderAdvise {
 	/**
-	 * 未授权
-	 * 只要当前项目的代码抛出UnauthorizedException就会回调
-	 */
+	 * 只要当前项目的代码抛出UnauthorizedException(访问未授权的资源触发)就会回调
+     */
 	@ExceptionHandler(value= {UnauthorizedException.class})
 	public ResultObj unauthorized() {
 		return ResultObj.UNAUTHORIZED;

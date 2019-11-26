@@ -24,10 +24,10 @@
     <!--适配器 映射器 注解驱动，以使得访问路径与方法的匹配可以通过注解配置（标配，必须写）-->
     <mvc:annotation-driven/>
 
-    <!-- Shiro 生命周期处理器
-    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />-->
+    <!-- Shiro 生命周期处理器-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
 
-    <!-- 配置用于开启Shiro Spring AOP 权限注解的支持  -->
+    <!-- 开启Shiro Spring AOP 权限注解的支持  -->
     <bean
             class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
             depends-on="lifecycleBeanPostProcessor" >
