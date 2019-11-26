@@ -13,5 +13,17 @@
     <sql id="Base_Column_List">
         id, name, permission
     </sql>
+    <select id="queryResourcesByUserId" resultType="java.lang.String">
+        SELECT
+            r.permission
+        FROM
+            resource r,
+            role_resource rr,
+            user_role ur
+        WHERE
+            r.id = rr.resource_id
+            AND rr.role_id = ur.role_id
+            AND ur.user_id = #{id}
+    </select>
 
 </mapper>

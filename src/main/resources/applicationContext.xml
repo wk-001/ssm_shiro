@@ -116,7 +116,9 @@
     <!-- =========================业务层配置===================================== -->
 
     <!--扫描除controller以外的包-->
-    <context:component-scan base-package="com.wk.service.impl"/>
+    <context:component-scan base-package="com.wk">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 
     <!--事务管理器-->
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -149,6 +151,6 @@
         <aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint"/>
     </aop:config>
 
-    <!--引入shiro配置文件
-    <import resource="classpath:application-shiro.xml" />-->
+    <!--引入shiro配置文件 -->
+    <import resource="classpath:application-shiro.xml" />
 </beans>

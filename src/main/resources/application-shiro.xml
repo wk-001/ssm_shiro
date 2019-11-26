@@ -7,15 +7,15 @@
     http://www.springframework.org/schema/util
     http://www.springframework.org/schema/util/spring-util.xsd">
      
-    <!-- 配置shiro的过滤器工厂类，id- shiroFilter要和我们在web.xml中配置的过滤器一致 -->
+    <!-- 配置shiro的过滤器工厂类，id- shiroFilter必须和web.xml中配置的过滤器一致 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-        <!-- 调用我们配置的权限管理器 -->
+        <!-- 注入安全管理器 -->
         <property name="securityManager" ref="securityManager" />
-        <!-- 配置我们的登录请求地址 -->
-        <property name="loginUrl" value="/login" />
+        <!-- 配置登录请求地址 默认是webapp/login.jsp -->
+        <property name="loginUrl" value="/" />
         <!-- 如果您请求的资源不再您的权限范围，则跳转到/403请求地址 -->
         <property name="unauthorizedUrl" value="/unAuthorization" />
-        <!-- 退出 -->
+        <!-- 过滤器 -->
         <property name="filters">
             <util:map>
             	<!-- 将自定义 的FormAuthenticationFilter注入shiroFilter中
@@ -26,19 +26,19 @@
                 <entry key="kickout" value-ref="kickoutSessionControlFilter"/>  -->
             </util:map>
         </property>
-        <!-- 权限配置 -->
+        <!-- 过滤链 按顺序从上至下进行过滤 范围小的在前 范围大的在后 -->
         <property name="filterChainDefinitions">
             <value>
                 <!-- anon表示此地址不需要任何权限即可访问 -->
-                /login=anon
+                /=anon
+                /login/**=anon
                 /register=anon
-                /index=anon
-                /welcome=anon
-                /unauthorized = anon 
-                /doLogout=logout
+                /unauthorized = anon
+                /login/logout=logout
                 /plugin/** = anon 	<!-- 静态资源文件夹 -->
-                <!--所有的请求(除去配置的静态资源请求或请求地址为anon的请求)都要通过登录验证,如果未登录则跳到/login -->
-                /admin/**=user,kickout 
+                <!--所有的请求(除去配置的静态资源请求或请求地址为anon的请求)都要通过登录验证,
+                如果未登录则跳到/login kickout控制并发登录-->
+                /**=authc
             </value>
         </property>
     </bean>
@@ -50,10 +50,11 @@
  
     <!-- 安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--注入UserRealm-->
         <property name="realm" ref="userRealm" />
-        <property name="sessionManager" ref="sessionManager" />  
+       <!-- <property name="sessionManager" ref="sessionManager" />  -->
         <!--<property name="cacheManager" ref="cacheManager" />  -->
-        <property name="rememberMeManager" ref="rememberMeManager" /> 
+        <!--<property name="rememberMeManager" ref="rememberMeManager"/>-->
     </bean>
     <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
     <bean
@@ -71,8 +72,9 @@
              <property name="storedCredentialsHexEncoded" value="true"/>
          </bean>
 
-         <bean id="userRealm" class="com.wk.shiro.UserRealm">
-                 <!-- 将上面声明的密码匹配器注入到自定义 Realm 的属性中去 -->
+    <!--声明UserRealm-->
+    <bean id="userRealm" class="com.wk.shiro.UserRealm">
+                 <!-- 将声明的密码匹配器注入到自定义 Realm 的属性中去 -->
         <property name="credentialsMatcher" ref="credentialsMatcher"/>
         <!-- 配置缓存相关 -->
         <!-- 启用缓存
@@ -174,6 +176,6 @@
         <property name="kickoutUrl" value="/login?kickout=1" />  
     </bean>   -->
 
-    <!-- Shiro 生命周期处理器 -->  
-    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />  
+    <!-- Shiro 生命周期处理器 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
 </beans>

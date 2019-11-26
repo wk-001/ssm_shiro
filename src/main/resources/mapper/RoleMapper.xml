@@ -13,5 +13,15 @@
     <sql id="Base_Column_List">
         id, name, code
     </sql>
+    <select id="queryRoleByUserId" resultType="java.lang.String">
+        SELECT
+            r.code
+        FROM
+            role r,
+            user_role ur
+        WHERE
+            ur.role_id = r.id
+            AND ur.user_id =#{id}
+    </select>
 
 </mapper>

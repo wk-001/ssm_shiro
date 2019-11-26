@@ -1,6 +1,8 @@
 package test;
 
-import com.wk.entity.Role;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wk.entity.User;
 import com.wk.service.RoleService;
 import com.wk.service.UserService;
@@ -16,7 +18,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -39,11 +40,34 @@ public class CodeTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleService roleService;
+
     @Test
     public void userList(){
-        List<User> list = userService.list();
+        IPage<User> page = new Page<User>(0,2);
+        IPage<User> pages = userService.page(page);
+        List<User> list = page.getRecords();
         for (User user : list) {
             System.out.println("user = " + user);
+        }
+    }
+
+    @Test
+    public void getColumn(){
+        QueryWrapper<User> wrapper = new QueryWrapper<User>()
+                .select("user_name");
+        List<User> list = userService.list(wrapper);
+        for (User user : list) {
+            System.out.println("user = " + user);
+        }
+    }
+
+    @Test
+    public void testRole(){
+        List<String> strings = roleService.queryRoleByUserId(1);
+        for (String str : strings) {
+            System.out.println("str = " + str);
         }
     }
 }
