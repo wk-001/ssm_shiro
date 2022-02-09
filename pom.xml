@@ -28,7 +28,7 @@
         <pagehelper-version>5.0.0</pagehelper-version>
         <lombok-version>1.18.8</lombok-version>
         <velocity-version>2.1</velocity-version>
-        <shiro-version>1.4.1</shiro-version>
+        <shiro-version>1.7.1</shiro-version>
         <fastjson.version>1.2.31</fastjson.version>
     </properties>
 
